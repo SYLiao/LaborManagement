@@ -90,7 +90,7 @@ public class TimeSheet {
 	}
 
 	public void setAmount(double amount) {
-		amount = amount;
+		this.amount = amount;
 	}
 
 	public String getStatus() {

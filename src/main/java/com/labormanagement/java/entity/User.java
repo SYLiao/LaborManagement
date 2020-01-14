@@ -21,7 +21,7 @@ public class User implements UserDetails{
 	@ManyToOne
 	private Role authority;
 	
-	@OneToMany
+	@OneToMany(fetch = FetchType.EAGER)
 	private List<TimeSheet> sheets;
 	
 	public User() {
