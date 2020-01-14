@@ -23,7 +23,7 @@ public class TimeSheet {
 	
 	private String siteCode;
 	
-	private double Amount;
+	private double amount;
 	
 	private String status;
 	
@@ -86,11 +86,11 @@ public class TimeSheet {
 	}
 
 	public double getAmount() {
-		return Amount;
+		return amount;
 	}
 
 	public void setAmount(double amount) {
-		Amount = amount;
+		amount = amount;
 	}
 
 	public String getStatus() {
