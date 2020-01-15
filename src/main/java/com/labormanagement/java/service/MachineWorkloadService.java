@@ -31,7 +31,7 @@ public class MachineWorkloadService {
 	public void updateMachineWorkload(MachineWorkload machineWorkload) {
 		MachineWorkload machineWorkload2 = machineWorkloadRepository.findById(machineWorkload.getMachineId()).orElse(null);
 		if(machineWorkload2 != null) {
-			machineWorkloadRepository.save(machineWorkload2);
+			machineWorkloadRepository.save(machineWorkload);
 		}
 	}
 	

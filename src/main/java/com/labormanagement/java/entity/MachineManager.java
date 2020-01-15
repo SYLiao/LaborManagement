@@ -1,6 +1,11 @@
 package com.labormanagement.java.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.*;
+
+import org.hibernate.mapping.Array;
 
 @Entity
 public class MachineManager {
@@ -13,6 +18,16 @@ public class MachineManager {
 	
 	private String description;
 	
+	private double rate;
+	
+	public double getRate() {
+		return rate;
+	}
+
+	public void setRate(double rate) {
+		this.rate = rate;
+	}
+
 	private double amount;
 	
 	@OneToOne
@@ -49,14 +64,15 @@ public class MachineManager {
 	public void setAmount(double amount) {
 		this.amount = amount;
 	}
-
-	public MachineWorkload getWorkload() {
+	
+	public MachineWorkload getWorkloads() {
 		return workload;
 	}
 
-	public void setWorkload(MachineWorkload workload) {
-		this.workload = workload;
+	public void setWorkloads(MachineWorkload workloads) {
+		this.workload = workloads;
 	}
+
 
 	public MachineManager() {
 		

@@ -15,26 +15,28 @@ public class TimeSheet {
 	@ManyToOne
 	private User user;
 	
-	@ManyToMany
-	private List<JobManager> jobManagers;
+	@OneToOne
+	private JobWorkload jobWorkload;
 	
-	@ManyToMany
-	private List<MachineManager> machineManagers;
+	@OneToOne
+	private MachineWorkload machineWorkload;
 	
 	private String siteCode;
 	
+	private double Hours;
+
 	private double amount;
 	
 	private String status;
 	
 	public TimeSheet(){
-		this.status = "Submitted";
+		this.status = "submitted";
 	}
 	
 	public TimeSheet(Date date, String sitecode) {
 		this.creatDate = date;
 		this.siteCode = sitecode;
-		this.status = "Submitted";
+		this.status = "submitted";
 	}
 
 	public long getTimeSheetId() {
@@ -61,20 +63,20 @@ public class TimeSheet {
 		this.user = user;
 	}
 
-	public List<JobManager> getJobManagers() {
-		return jobManagers;
+	public JobWorkload getJobWorkload() {
+		return jobWorkload;
 	}
 
-	public void setJobManagers(List<JobManager> jobManagers) {
-		this.jobManagers = jobManagers;
+	public void setJobWorkload(JobWorkload jobWorkload) {
+		this.jobWorkload = jobWorkload;
 	}
 
-	public List<MachineManager> getMachineManagers() {
-		return machineManagers;
+	public MachineWorkload getMachineWorkload() {
+		return machineWorkload;
 	}
 
-	public void setMachineManagers(List<MachineManager> machineManagers) {
-		this.machineManagers = machineManagers;
+	public void setMachineWorkload(MachineWorkload machineWorkload) {
+		this.machineWorkload = machineWorkload;
 	}
 
 	public String getSiteCode() {
@@ -99,6 +101,14 @@ public class TimeSheet {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	
+	public double getHours() {
+		return Hours;
+	}
+
+	public void setHours(double hours) {
+		Hours = hours;
 	}
 
 }

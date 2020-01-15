@@ -1,6 +1,7 @@
 package com.labormanagement.java.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,17 @@ public class TimeSheetService {
 		return result;
 	}
 	
+	public List<TimeSheet> findByDate(Date date){
+		Iterable<TimeSheet> timesheets = timeSheetRepository.findAll();
+		List<TimeSheet> resultList = new ArrayList<>();
+		for(TimeSheet timeSheet : timesheets) {
+			if(timeSheet.getCreatDate().equals(date)) {
+				resultList.add(timeSheet);
+			}
+		}
+		return resultList;
+	}
+	
 	public List<TimeSheet> findAll(){
 		return (List<TimeSheet>) timeSheetRepository.findAll();
 	}
@@ -42,7 +54,7 @@ public class TimeSheetService {
 	public void updateTimeSheet(TimeSheet timeSheet) {
 		TimeSheet timeSheet2 = timeSheetRepository.findById(timeSheet.getTimeSheetId()).orElse(null);
 		if(timeSheet2 != null) {
-			timeSheetRepository.save(timeSheet2);
+			timeSheetRepository.save(timeSheet);
 		}
 	}
 	

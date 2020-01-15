@@ -28,15 +28,14 @@ public class JobManagerService {
 		return (List<JobManager>) jobManagerRepository.findAll();
 	}
 	
-	public List<JobManager> findByJobCode(String jobCode){
+	public JobManager findByJobCode(String jobCode){
 		Iterable<JobManager> jobsIterable = jobManagerRepository.findAll();
-		List<JobManager> resultJobManagers = new ArrayList<JobManager>();
 		for(JobManager jobManager : jobsIterable) {
 			if(jobManager.getJobCode().equals(jobCode)) {
-				resultJobManagers.add(jobManager);
+				return jobManager;
 			}
 		}
-		return resultJobManagers;
+		return null;
 	}
 	
 	public void update(JobManager jobManager) {

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="utf-8">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<title>Job Code Management</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+</head>
+
+<body>
+<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1 class="display-4">Disaster Recovery Application:Time Card Submission</h1>
+  </div>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavDropdown">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/Admin/showJobCode}">Job Code Management<span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/Admin/showMachineCode}">Machine Management</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/Admin/showTimeSheet}">Timecard Approval</a>
+      </li>
+       <li class="nav-item">
+        <a class="nav-link" th:href="@{/Normal/showTimeSheet}">Normal User</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+</div>
+<div class="page-header text-center">
+  <h1>Job Code Management</h1>
+</div>
+			<a th:href="@{/Admin/createJob}" class="btn btn-primary">
+                <i class="fas fa-user-plus ml-2"> Add New </i></a>
+	<div th:switch="${size}">
+		<div th:case="0">
+			No result found.
+		
+		</div>
+		
+		<div th:case="*">
+				<div class="container my-2">
+		<div class="card">
+			<div class="card-body">
+				<div th:switch="${JobManager}" class="container my-5">
+				<p class="my-5">
+                
+                </p>
+					<div class="col-md-10">
+						<div th:case="*">
+							<table class="table table-striped table-responsive-md">
+								<thead>
+									<tr>
+										<th>Job Code</th>
+										<th>Description</th>
+										<th>Amount</th>
+										<th>Edit</th>
+										<th>Delete</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="JobManager : ${JobManager}">
+										<td th:text="${JobManager.jobCode}"></td>
+										<td th:text="${JobManager.description}"></td>
+										<td th:text="${JobManager.amout}"></td>
+										<td><a th:href="@{/Admin/editJob/{id}(id=${JobManager.jobId})}"
+											class="btn btn-primary"> <i class="fas fa-user-edit ml-2"></i>
+										</a></td>
+										<td><a th:href="@{/Admin/deleteJob/{id}(id=${JobManager.jobId})}"
+											class="btn btn-primary"> <i
+												class="fas fa-user-times ml-2"></i>
+										</a></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+			
+		</div>
+	
+	</div>
+
+</body>
+
+</html>

@@ -15,7 +15,7 @@ public class JobWorkload {
 	
 	private double amount;
 	
-	@OneToOne
+	@ManyToOne
 	private JobManager jobManager;
 	
 	public JobWorkload() {

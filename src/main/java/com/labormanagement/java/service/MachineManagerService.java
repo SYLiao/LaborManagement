@@ -27,10 +27,20 @@ public class MachineManagerService {
 		return (List<MachineManager>) machineManagerRepository.findAll();
 	}
 	
+	public MachineManager findByCode(String code) {
+		List<MachineManager> list = findAll();
+		for(MachineManager machineManager : list) {
+			if(machineManager.getMachineCode().equals(code)) {
+				return machineManager;
+			}
+		}
+		return null;
+	}
+	
 	public void updateMachineManager(MachineManager machineManager) {
 		MachineManager machineManager2 = machineManagerRepository.findById(machineManager.getMachineId()).orElse(null);
 		if(machineManager2 != null) {
-			machineManagerRepository.save(machineManager2);
+			machineManagerRepository.save(machineManager);
 		}
 	}
 	

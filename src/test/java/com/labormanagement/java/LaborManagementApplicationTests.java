@@ -28,12 +28,9 @@ class LaborManagementApplicationTests {
 
 	@Test
 	void contextLoads() {
-		Date date = new Date(1995, 8, 14);
-		TimeSheet timeSheet = timeSheetRepository.findById(1L).orElse(null);
-		User user = userRepository.findById(1L).orElse(null);
-		List<TimeSheet> list = user.getSheets();
-		list.add(timeSheet);
-		user.setSheets(list);
+		Role admin= new Role("admin");
+		roleRepository.save(admin);
+		User user = new User("Shiyao", "1234", roleRepository.findById(1L).orElse(null));
 		userRepository.save(user);
 	}
 
