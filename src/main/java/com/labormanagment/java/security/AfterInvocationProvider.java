@@ -1,19 +1,26 @@
 package com.labormanagment.java.security;
 
-public class AfterInvocationProvider {
+import java.util.Collection;
+
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.ConfigAttribute;
+
+public abstract class AfterInvocationProvider {
 	
 		// ~ Methods
 		// ========================================================================================================
 
-		Object decide(Authentication authentication, Object object,
+		abstract Object decide(Authentication authentication, Object object,
 				Collection<ConfigAttribute> attributes, Object returnedObject)
 				throws AccessDeniedException;
 
 		
-		
-		boolean supports(ConfigAttribute attribute);
+		abstract boolean supports(ConfigAttribute attribute);
 
 	
-		boolean supports(Class<?> clazz);
+		boolean supports(Class<?> clazz) {
+			return false;
+		}
 	}
-}
+

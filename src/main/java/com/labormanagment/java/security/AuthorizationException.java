@@ -1,10 +1,17 @@
 package com.labormanagment.java.security;
 
+import java.nio.file.AccessDeniedException;
+
 public class AuthorizationException {
 
 	public class AuthorizationServiceException extends AccessDeniedException {
 		// ~ Constructors
 		// ===================================================================================================
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 
 		/**
 		 * Constructs an <code>AuthorizationServiceException</code> with the specified
@@ -19,7 +26,7 @@ public class AuthorizationException {
 		 * and root cause.
 		 */
 		public AuthorizationServiceException(String msg, Throwable t) {
-			super(msg, t);
+			super(msg);
 		}
 	}
 }
