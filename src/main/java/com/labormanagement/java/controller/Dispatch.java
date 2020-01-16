@@ -103,7 +103,6 @@ public class Dispatch {
 		List<JobManager> list = jobManagerService.findAll();
 		mv.addObject("JobManager", list);
 		mv.addObject("size", String.valueOf(list.size()));
-		checkuser();
 		mv.addObject("username", user.getUsername());
 		return mv;
 	}
@@ -115,8 +114,10 @@ public class Dispatch {
 		List<MachineManager> list = machineManagerService.findAll();
 		mv.addObject("MachineManager", list);
 		mv.addObject("size", list.size());
-		checkuser();
-		mv.addObject("username", user.getUsername());
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Object principal = authentication.getPrincipal();
+		User user2 = (User) principal;
+		mv.addObject("username", user2.getUsername());
 		return mv;
 	}
 	
@@ -271,6 +272,8 @@ public class Dispatch {
 		ModelAndView mv = new ModelAndView("TimeSheetSubmission2");
 		mv.addObject("JobWorkload", new JobWorkload());
 		mv.addObject("MachineWorkload", new MachineWorkload());
+		mv.addObject("jobs", jobManagerService.findAll());
+		mv.addObject("machines", machineManagerService.findAll());
 		return mv;
 	}
 	

@@ -32,14 +32,20 @@
       <li class="nav-item">
         <a class="nav-link" th:href="@{/Admin/showTimeSheet}">Timecard Approval</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/home}">Home</a>
+      </li>
     </ul>
+    </div>
+    <div>
     <ul class="nav justify-content-end">
   <li class="nav-item">
     <div th:text="${username}"></div>
   </li>
   
     <li class="nav-item">
-    <form action="logout" method="post">
+    <form action="/LaborManagement-1/logout" method="post">
+     <input type="hidden" name="${_csrf.parameterName }" value="${_csrf.token }"/>
     	<input type="submit" value="logout">
     </form>
     </li>
