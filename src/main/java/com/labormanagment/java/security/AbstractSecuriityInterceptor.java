@@ -1,10 +1,4 @@
-package com.labormanagment.java.security;
-
-public class AbstractSecuriityInterceptor {
-	
-
-
-	package org.springframework.security.access.intercept;
+	package com.labormanagment.java.security;
 
 	import java.util.Collection;
 	import java.util.HashSet;
@@ -27,7 +21,8 @@ public class AbstractSecuriityInterceptor {
 	import org.springframework.security.access.event.AuthorizationFailureEvent;
 	import org.springframework.security.access.event.AuthorizedEvent;
 	import org.springframework.security.access.event.PublicInvocationEvent;
-	import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
+import org.springframework.security.access.intercept.RunAsManager;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 	import org.springframework.security.authentication.AuthenticationManager;
 	import org.springframework.security.authentication.AuthenticationServiceException;
 	import org.springframework.security.core.Authentication;
@@ -37,8 +32,8 @@ public class AbstractSecuriityInterceptor {
 	import org.springframework.security.core.context.SecurityContextHolder;
 	import org.springframework.util.Assert;
 
-	/
-	 * Abstract class that implements security interception for secure objects.
+	
+	  Abstract class that implements security interception for secure objects.
 	
 	public abstract class AbstractSecurityInterceptor implements InitializingBean,
 			ApplicationEventPublisherAware, MessageSourceAware {
@@ -214,14 +209,7 @@ public class AbstractSecuriityInterceptor {
 			}
 		}
 
-		/**
-		 * Cleans up the work of the <tt>AbstractSecurityInterceptor</tt> after the secure
-		 * object invocation has been completed. This method should be invoked after the
-		 * secure object invocation and before afterInvocation regardless of the secure object
-		 * invocation returning successfully (i.e. it should be done in a finally block).
-		 *
-		 * @param token as returned by the {@link #beforeInvocation(Object)} method
-		 */
+		
 		protected void finallyInvocation(InterceptorStatusToken token) {
 			if (token != null && token.isContextHolderRefreshRequired()) {
 				if (logger.isDebugEnabled()) {
@@ -233,16 +221,7 @@ public class AbstractSecuriityInterceptor {
 			}
 		}
 
-		/**
-		 * Completes the work of the <tt>AbstractSecurityInterceptor</tt> after the secure
-		 * object invocation has been completed.
-		 *
-		 * @param token as returned by the {@link #beforeInvocation(Object)} method
-		 * @param returnedObject any object returned from the secure object invocation (may be
-		 * <tt>null</tt>)
-		 * @return the object the secure object invocation should ultimately return to its
-		 * caller (may be <tt>null</tt>)
-		 */
+		
 		protected Object afterInvocation(InterceptorStatusToken token, Object returnedObject) {
 			if (token == null) {
 				// public object
@@ -272,13 +251,7 @@ public class AbstractSecuriityInterceptor {
 			return returnedObject;
 		}
 
-		/**
-		 * Checks the current authentication token and passes it to the AuthenticationManager
-		 * if {@link org.springframework.security.core.Authentication#isAuthenticated()}
-		 * returns false or the property <tt>alwaysReauthenticate</tt> has been set to true.
-		 *
-		 * @return an authenticated <tt>Authentication</tt> object.
-		 */
+		
 		private Authentication authenticateIfRequired() {
 			Authentication authentication = SecurityContextHolder.getContext()
 					.getAuthentication();
@@ -304,16 +277,6 @@ public class AbstractSecuriityInterceptor {
 			return authentication;
 		}
 
-		/**
-		 * Helper method which generates an exception containing the passed reason, and
-		 * publishes an event to the application context.
-		 * <p>
-		 * Always throws an exception.
-		 *
-		 * @param reason to be provided in the exception detail
-		 * @param secureObject that was being called
-		 * @param configAttribs that were defined for the secureObject
-		 */
 		private void credentialsNotFound(String reason, Object secureObject,
 				Collection<ConfigAttribute> configAttribs) {
 			AuthenticationCredentialsNotFoundException exception = new AuthenticationCredentialsNotFoundException(
@@ -342,13 +305,7 @@ public class AbstractSecuriityInterceptor {
 			return runAsManager;
 		}
 
-		/**
-		 * Indicates the type of secure objects the subclass will be presenting to the
-		 * abstract parent for processing. This is used to ensure collaborators wired to the
-		 * {@code AbstractSecurityInterceptor} all support the indicated secure object class.
-		 *
-		 * @return the type of secure object the subclass provides services for
-		 */
+	
 		public abstract Class<?> getSecureObjectClass();
 
 		public boolean isAlwaysReauthenticate() {
@@ -373,18 +330,7 @@ public class AbstractSecuriityInterceptor {
 			this.afterInvocationManager = afterInvocationManager;
 		}
 
-		/**
-		 * Indicates whether the <code>AbstractSecurityInterceptor</code> should ignore the
-		 * {@link Authentication#isAuthenticated()} property. Defaults to <code>false</code>,
-		 * meaning by default the <code>Authentication.isAuthenticated()</code> property is
-		 * trusted and re-authentication will not occur if the principal has already been
-		 * authenticated.
-		 *
-		 * @param alwaysReauthenticate <code>true</code> to force
-		 * <code>AbstractSecurityInterceptor</code> to disregard the value of
-		 * <code>Authentication.isAuthenticated()</code> and always re-authenticate the
-		 * request (defaults to <code>false</code>).
-		 */
+	
 		public void setAlwaysReauthenticate(boolean alwaysReauthenticate) {
 			this.alwaysReauthenticate = alwaysReauthenticate;
 		}
@@ -402,31 +348,12 @@ public class AbstractSecuriityInterceptor {
 			this.messages = new MessageSourceAccessor(messageSource);
 		}
 
-		/**
-		 * Only {@code AuthorizationFailureEvent} will be published. If you set this property
-		 * to {@code true}, {@code AuthorizedEvent}s will also be published.
-		 *
-		 * @param publishAuthorizationSuccess default value is {@code false}
-		 */
+		
 		public void setPublishAuthorizationSuccess(boolean publishAuthorizationSuccess) {
 			this.publishAuthorizationSuccess = publishAuthorizationSuccess;
 		}
 
-		/**
-		 * By rejecting public invocations (and setting this property to <tt>true</tt>),
-		 * essentially you are ensuring that every secure object invocation advised by
-		 * <code>AbstractSecurityInterceptor</code> has a configuration attribute defined.
-		 * This is useful to ensure a "fail safe" mode where undeclared secure objects will be
-		 * rejected and configuration omissions detected early. An
-		 * <tt>IllegalArgumentException</tt> will be thrown by the
-		 * <tt>AbstractSecurityInterceptor</tt> if you set this property to <tt>true</tt> and
-		 * an attempt is made to invoke a secure object that has no configuration attributes.
-		 *
-		 * @param rejectPublicInvocations set to <code>true</code> to reject invocations of
-		 * secure objects that have no configuration attributes (by default it is
-		 * <code>false</code> which treats undeclared secure objects as "public" or
-		 * unauthorized).
-		 */
+		
 		public void setRejectPublicInvocations(boolean rejectPublicInvocations) {
 			this.rejectPublicInvocations = rejectPublicInvocations;
 		}
@@ -455,4 +382,4 @@ public class AbstractSecuriityInterceptor {
 		}
 	}
 
-}
+
