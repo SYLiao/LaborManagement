@@ -1,5 +1,8 @@
 package com.labormanagement.java.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.*;
 
 @Entity
@@ -13,11 +16,21 @@ public class JobManager {
 	
 	private String description;
 	
+	private double rate;
+	
+	public double getRate() {
+		return rate;
+	}
+
+	public void setRate(double rate) {
+		this.rate = rate;
+	}
+
 	private double amout;
 	
 	@OneToOne
-	private JobWorkload workload;
-	
+	private JobWorkload jobWorkload;
+
 	public JobManager() {
 		
 	}
@@ -60,12 +73,11 @@ public class JobManager {
 		this.amout = amout;
 	}
 
-	public JobWorkload getWorkload() {
-		return workload;
+	public JobWorkload getWorkloads() {
+		return jobWorkload;
 	}
 
-	public void setWorkload(JobWorkload workload) {
-		this.workload = workload;
+	public void setWorkloads(JobWorkload workloads) {
+		this.jobWorkload = workloads;
 	}
-
 }

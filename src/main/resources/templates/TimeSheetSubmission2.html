@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="utf-8">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<title>Timesheet Submission</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+</head>
+
+<body>
+
+	<div class="container my-5">
+		<form action="#" th:action="@{/Normal/createTimesheet}" method="post">>
+			<div class="form-row">
+				<div class="form-group col-md-4">
+					<label for="inputEmail4">Site Code</label> <input type="text" name="siteCode"
+						class="form-control" id="inputEmail4" placeholder="SiteCode">
+				</div>
+<!-- 				<div class="form-group col-md-4">
+					<label for="inputPassword4">Contractor Name</label> <input
+						type="password" class="form-control" id="inputPassword4"
+						placeholder="Contractor Name">
+				</div> -->
+<!-- 				<div class="form-group col-md-4">
+					<label for="inputPassword4">Date</label> <input type="text" name="Date"
+						class="form-control" id="inputPassword4" placeholder="Date">
+				</div> -->
+			</div>
+			<h3>Labor Entry</h3>
+			<div class="card" th:object="${JobWorkload}">
+				<div class="card-body">
+					<div class="form-row">
+						<div class="form-group col-md-4">
+							<label for="inputState">Labor Code</label> 
+							<select id="inputState" class="form-control" name="Job">
+								<option selected>Choose...</option>
+								<option>job1</option>
+								<option>job2</option>
+							</select>
+						</div>
+						<div class="form-group col-md-4">
+							<label for="inputPassword4">Hrs Worked</label> <input
+								type="text" class="form-control" id="inputPassword4"
+								placeholder="Hrs Worked" th:field="*{hours}">
+						</div>
+						<div class="form-group col-md-4">
+							<label for="inputPassword4">Total</label> <input type="text" th:field="*{amount}"
+								class="form-control" id="inputPassword4" placeholder="Total">
+						</div>
+					</div>
+				</div>
+			</div>
+			<br>
+			<h3>Machine Entry</h3>
+			<div class="card" th:object="${MachineWorkload}">
+				<div class="card-body">
+					<div class="form-row">
+						<div class="form-group col-md-4">
+							<label for="inputState">Machine Code</label> 
+							<select id="inputState" class="form-control" name="Machine">
+								<option selected>Choose...</option>
+								<option>machine1</option>
+								<option>machine2</option>
+							</select>
+						</div>
+						<div class="form-group col-md-4">
+							<label for="inputPassword4">Hrs Used</label> <input
+								type="text" class="form-control" id="inputPassword4"
+								placeholder="Hrs Used" th:field="*{hours}">
+						</div>
+						<div class="form-group col-md-4">
+							<label for="inputPassword4">Total</label> <input type="text" th:field="*{amount}"
+								class="form-control" id="inputPassword4" placeholder="Total">
+						</div>
+					</div>
+				</div>
+			</div>
+			<br>
+			<div>
+			<button type="submit" class="btn btn-primary">Submit</button>
+			</div>
+		</form>
+	</div>
+
+</body>
+
+</html>

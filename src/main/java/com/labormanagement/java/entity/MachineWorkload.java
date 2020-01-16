@@ -15,7 +15,7 @@ public class MachineWorkload {
 	
 	private double amount;
 	
-	@OneToOne
+	@ManyToOne
 	private MachineManager machineManager;
 	
 	public MachineWorkload() {
