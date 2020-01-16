@@ -4,12 +4,21 @@ import java.util.*;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 public class User implements UserDetails{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long userId;
@@ -19,25 +28,33 @@ public class User implements UserDetails{
 	private String password;
 	
 	@ManyToOne
-	private Role authority;
+	private Role role;
 	
-	@OneToMany(fetch = FetchType.EAGER)
+	@OneToMany(fetch=FetchType.EAGER)
 	private List<TimeSheet> sheets;
 	
 	public User() {
 		this.sheets = new ArrayList<>();
 	}
 	
+	public User(String username, String password) {
+		this.username = username;
+		this.password = password;
+		this.sheets = new ArrayList<>();
+	}
 	public User(String username, String password, Role role) {
 		this.username = username;
 		this.password = password;
-		this.authority = role;
+		this.role = role;
 		this.sheets = new ArrayList<>();
 	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		// TODO Auto-generated method stub
+		if(this.role != null) {
+			return AuthorityUtils.commaSeparatedStringToAuthorityList(this.getRole().getName());
+		}
 		return null;
 	}
 
@@ -49,12 +66,12 @@ public class User implements UserDetails{
 		this.userId = userId;
 	}
 
-	public Role getAuthority() {
-		return authority;
+	public Role getRole() {
+		return role;
 	}
 
-	public void setAuthority(Role authority) {
-		this.authority = authority;
+	public void setRole(Role role) {
+		this.role = role;
 	}
 
 	public List<TimeSheet> getSheets() {

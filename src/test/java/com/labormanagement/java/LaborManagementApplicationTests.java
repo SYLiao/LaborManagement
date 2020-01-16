@@ -30,7 +30,7 @@ class LaborManagementApplicationTests {
 	void contextLoads() {
 		Role admin= new Role("admin");
 		roleRepository.save(admin);
-		User user = new User("Shiyao", "1234", roleRepository.findById(1L).orElse(null));
+		User user = new User("1234", "1234", admin);
 		userRepository.save(user);
 	}
 

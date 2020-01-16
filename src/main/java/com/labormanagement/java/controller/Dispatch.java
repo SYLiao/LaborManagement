@@ -1,6 +1,9 @@
 package com.labormanagement.java.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +18,7 @@ import com.labormanagement.java.entity.JobWorkload;
 import com.labormanagement.java.entity.MachineManager;
 import com.labormanagement.java.entity.MachineWorkload;
 import com.labormanagement.java.entity.TimeSheet;
+import com.labormanagement.java.entity.User;
 import com.labormanagement.java.service.JobManagerService;
 import com.labormanagement.java.service.JobWorkloadService;
 import com.labormanagement.java.service.MachineManagerService;
@@ -23,11 +27,7 @@ import com.labormanagement.java.service.RoleService;
 import com.labormanagement.java.service.TimeSheetService;
 import com.labormanagement.java.service.UserService;
 
-import javassist.expr.NewArray;
-
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -56,43 +56,84 @@ public class Dispatch {
 	@Autowired
 	private MachineManagerService machineManagerService;
 	
+	private User user;
+	
+	private void getUser() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Object principal = authentication.getPrincipal();
+		user = (User) principal;
+	}
+	
+	private void checkuser() {
+		if(user == null) {
+			getUser();
+		}
+	}
+	
 	@RequestMapping("/")
-	public ModelAndView indexPage() {
-		ModelAndView mv = new ModelAndView("JobManager");
-		List<JobManager> list = jobManagerService.findAll();
-		mv.addObject("JobManager", list);
-		mv.addObject("size", String.valueOf(list.size()));
-		return mv;
+	public String indexPage() {
+		return "login";
+	}
+	
+	@RequestMapping("/logout-process")
+	public String logout() {
+		return "/logout";
+	}
+	
+	@RequestMapping("/login-successful")
+	public ModelAndView welcome() {
+		ModelAndView mView = new ModelAndView("HomePage");
+		checkuser();
+		mView.addObject("username", user.getUsername());
+		return mView;
+	}
+	
+	@RequestMapping("/home")
+	public ModelAndView home() {
+		checkuser();
+		ModelAndView mView = new ModelAndView("HomePage");
+		mView.addObject("username", user.getUsername());
+		return mView;
 	}
 	
 	@RequestMapping(value = "/Admin/showJobCode", method = RequestMethod.GET)
+	@PreAuthorize("hasAuthority('admin')")
 	public ModelAndView getJobManager(){
 		ModelAndView mv = new ModelAndView("JobManager");
 		List<JobManager> list = jobManagerService.findAll();
 		mv.addObject("JobManager", list);
 		mv.addObject("size", String.valueOf(list.size()));
+		checkuser();
+		mv.addObject("username", user.getUsername());
 		return mv;
 	}
 	
 	@RequestMapping(value = "/Admin/showMachineCode", method = RequestMethod.GET)
+	@PreAuthorize("hasAuthority('admin')")
 	public ModelAndView getMachineManager(){
 		ModelAndView mv = new ModelAndView("MachineMangement");
 		List<MachineManager> list = machineManagerService.findAll();
 		mv.addObject("MachineManager", list);
 		mv.addObject("size", list.size());
+		checkuser();
+		mv.addObject("username", user.getUsername());
 		return mv;
 	}
 	
 	@RequestMapping(value = "/Admin/showTimeSheet", method = RequestMethod.GET)
+	@PreAuthorize("hasAuthority('admin')")
 	public ModelAndView getTimeSheet(){
 		ModelAndView mv = new ModelAndView("TimesheetApproval");
 		List<TimeSheet> list = timeSheetService.findAll();
 		mv.addObject("TimeSheet", list);
 		mv.addObject("size", list.size());
+		checkuser();
+		mv.addObject("username", user.getUsername());
 		return mv;
 	}
 	
 	@RequestMapping(value = "/Admin/approvalTimeSheet/{id}", method = RequestMethod.GET)
+	@PreAuthorize("hasAuthority('admin')")
 	public ModelAndView approvalTimeSheet(@PathVariable long id){
 		TimeSheet timeSheet = timeSheetService.findById(id);
 		timeSheet.setStatus("Approval");
@@ -101,18 +142,24 @@ public class Dispatch {
 		List<TimeSheet> list = timeSheetService.findAll();
 		mv.addObject("TimeSheet", list);
 		mv.addObject("size", list.size());
+		checkuser();
+		mv.addObject("username", user.getUsername());
 		return mv;
 	}
 	
 	@RequestMapping(value = "/Admin/editJob/{id}", method = RequestMethod.GET)
+	@PreAuthorize("hasAuthority('admin')")
 	public ModelAndView editJob(@PathVariable long id) {
 		ModelAndView mv = new ModelAndView("JobManagerEdit");
 		mv.addObject("jobId", id);
 		mv.addObject("JobManager", new JobManager());
+		checkuser();
+		mv.addObject("username", user.getUsername());
 		return mv;
 	}
 	
 	@RequestMapping(value = "/Admin/editJob/{id}", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('admin')")
 	public ModelAndView editJobConfirm(@PathVariable long id, JobManager job) throws ParseException {
 		job.setJobId(id);
 		jobManagerService.update(job);
@@ -120,10 +167,13 @@ public class Dispatch {
 		List<JobManager> list = jobManagerService.findAll();
 		mv.addObject("JobManager", list);
 		mv.addObject("size", String.valueOf(list.size()));
+		checkuser();
+		mv.addObject("username", user.getUsername());
 		return mv;
 	}
 	
 	@RequestMapping(value = "/Admin/createJob", method = RequestMethod.GET)
+	@PreAuthorize("hasAuthority('admin')")
 	public ModelAndView createJob() {
 		ModelAndView mv = new ModelAndView("JobManagerCreate");
 		mv.addObject("JobManager", new JobManager());
@@ -131,6 +181,7 @@ public class Dispatch {
 	}
 	
 	@RequestMapping(value = "/Admin/createJob", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('admin')")
 	public ModelAndView createTimesheetConfirm(JobManager jobManager) throws ParseException {
 		jobManagerService.createJobManager(jobManager);
 		ModelAndView mv = new ModelAndView("JobManager");
@@ -141,6 +192,7 @@ public class Dispatch {
 	}
 	
 	@RequestMapping(value = "/Admin/editMachine/{id}", method = RequestMethod.GET)
+	@PreAuthorize("hasAuthority('admin')")
 	public ModelAndView editMachine(@PathVariable long id) {
 		ModelAndView mv = new ModelAndView("MachineManagerEdit");
 		mv.addObject("MachineId", id);
@@ -149,6 +201,7 @@ public class Dispatch {
 	}
 	
 	@RequestMapping(value = "/Admin/editMachine/{id}", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('admin')")
 	public ModelAndView editMachineConfirm(@PathVariable long id, MachineManager machine) throws ParseException {
 		machine.setMachineId(id);
 		machineManagerService.updateMachineManager(machine);
@@ -160,6 +213,7 @@ public class Dispatch {
 	}
 	
 	@RequestMapping(value = "/Admin/createMachine", method = RequestMethod.GET)
+	@PreAuthorize("hasAuthority('admin')")
 	public ModelAndView createMachine() {
 		ModelAndView mv = new ModelAndView("MachineCreate");
 		mv.addObject("Machine", new MachineManager());
@@ -167,6 +221,7 @@ public class Dispatch {
 	}
 	
 	@RequestMapping(value = "/Admin/createMachine", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('admin')")
 	public ModelAndView createMachineConfirm(MachineManager machineManager) throws ParseException {
 		machineManagerService.createMachineManager(machineManager);
 		ModelAndView mv = new ModelAndView("MachineMangement");
@@ -177,6 +232,7 @@ public class Dispatch {
 	}
 	
 	@RequestMapping(value = "/Admin/deleteMachine/{id}", method = RequestMethod.GET)
+	@PreAuthorize("hasAuthority('admin')")
 	public ModelAndView deleteMachine(@PathVariable long id) {
 		machineManagerService.deleteById(id);
 		ModelAndView mv = new ModelAndView("MachineMangement");
@@ -187,6 +243,7 @@ public class Dispatch {
 	}
 	
 	@RequestMapping(value = "/Admin/deleteJob/{id}", method = RequestMethod.GET)
+	@PreAuthorize("hasAuthority('admin')")
 	public ModelAndView deleteJob(@PathVariable long id) {
 		jobManagerService.deleteById(id);
 		ModelAndView mv = new ModelAndView("JobManager");
@@ -197,15 +254,19 @@ public class Dispatch {
 	}
 	
 	@RequestMapping(value = "/Normal/showTimeSheet", method = RequestMethod.GET)
+	@PreAuthorize("hasAuthority('contactor')")
 	public ModelAndView getTimeSheetNormal(){
 		ModelAndView mv = new ModelAndView("TimeSheetApprovalNormal");
 		List<TimeSheet> list = timeSheetService.findAll();
 		mv.addObject("TimeSheet", list);
 		mv.addObject("size", list.size());
+		checkuser();
+		mv.addObject("username", user.getUsername());
 		return mv;
 	}
 	
 	@RequestMapping(value = "/Normal/createTimesheet", method = RequestMethod.GET)
+	@PreAuthorize("hasAuthority('contactor')")
 	public ModelAndView createTimesheet() {
 		ModelAndView mv = new ModelAndView("TimeSheetSubmission2");
 		mv.addObject("JobWorkload", new JobWorkload());
@@ -214,9 +275,14 @@ public class Dispatch {
 	}
 	
 	@RequestMapping(value = "/Normal/createTimesheet", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('contactor')")
 	public ModelAndView createTimesheetConfirm(JobWorkload jobWorkload, MachineWorkload machineWorkload,
 			@RequestParam("siteCode") String siteCode, @RequestParam("Job") String jobCode,
 			@RequestParam("Machine") String machineCode) throws ParseException {
+		if(user == null) {
+			return new ModelAndView("login");
+		}
+		
 		Date date = new Date();
 		TimeSheet timeSheet = new TimeSheet(date, siteCode);
 		MachineManager machineManager = machineManagerService.findByCode(machineCode);
@@ -229,7 +295,14 @@ public class Dispatch {
 		
 		timeSheet.setJobWorkload(jobWorkload);
 		timeSheet.setMachineWorkload(machineWorkload);
+		timeSheet.setUser(user);
 		timeSheetService.createTimeSheet(timeSheet);
+		
+		List<TimeSheet> timeSheets = user.getSheets();
+		timeSheets.add(timeSheet);
+		user.setSheets(timeSheets);
+		userService.updateUser(user);
+		
 		ModelAndView mv = new ModelAndView("TimeSheetApprovalNormal");
 		List<TimeSheet> list = timeSheetService.findAll();
 		mv.addObject("TimeSheet", list);

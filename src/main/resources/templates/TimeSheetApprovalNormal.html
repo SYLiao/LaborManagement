@@ -30,6 +30,18 @@
         <a class="nav-link" th:href="@{/Normal/showTimeSheet}">Timecard display</a>
       </li>
     </ul>
+    <ul class="nav justify-content-end">
+  <li class="nav-item">
+    <div th:text="${username}"></div>
+  </li>
+  
+    <li class="nav-item">
+    <form action="logout" method="post">
+    	<input type="submit" value="logout">
+    </form>
+    </li>
+  
+</ul>
   </div>
 </nav>
 </div>
