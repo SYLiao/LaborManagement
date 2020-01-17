@@ -65,9 +65,7 @@ public class Dispatch {
 	}
 	
 	private void checkuser() {
-		if(user == null) {
 			getUser();
-		}
 	}
 	
 	@RequestMapping("/")
@@ -258,7 +256,7 @@ public class Dispatch {
 	@PreAuthorize("hasAuthority('contactor')")
 	public ModelAndView getTimeSheetNormal(){
 		ModelAndView mv = new ModelAndView("TimeSheetApprovalNormal");
-		List<TimeSheet> list = timeSheetService.findAll();
+		List<TimeSheet> list = user.getSheets();
 		mv.addObject("TimeSheet", list);
 		mv.addObject("size", list.size());
 		checkuser();
@@ -281,7 +279,7 @@ public class Dispatch {
 	@PreAuthorize("hasAuthority('contactor')")
 	public ModelAndView createTimesheetConfirm(JobWorkload jobWorkload, MachineWorkload machineWorkload,
 			@RequestParam("siteCode") String siteCode, @RequestParam("Job") String jobCode,
-			@RequestParam("Machine") String machineCode) throws ParseException {
+			@RequestParam("Machine") String machineCode, @RequestParam("hourMachine") double hour) throws ParseException {
 		if(user == null) {
 			return new ModelAndView("login");
 		}
@@ -289,6 +287,7 @@ public class Dispatch {
 		Date date = new Date();
 		TimeSheet timeSheet = new TimeSheet(date, siteCode);
 		MachineManager machineManager = machineManagerService.findByCode(machineCode);
+		machineWorkload.setHours(hour);
 		machineWorkload.setMachineManager(machineManager);
 		machineWorkloadService.createMachineWorkload(machineWorkload);
 		

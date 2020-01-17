@@ -11,7 +11,7 @@ public class MachineWorkload {
 	
 	private double rate;
 	
-	private double hours;
+	private double Hours;
 	
 	private double amount;
 	
@@ -23,7 +23,7 @@ public class MachineWorkload {
 	}
 	
 	public MachineWorkload(double rate, double hours) {
-		this.hours = hours;
+		this.Hours = hours;
 		this.rate  =rate;
 	}
 
@@ -44,11 +44,11 @@ public class MachineWorkload {
 	}
 
 	public double getHours() {
-		return hours;
+		return Hours;
 	}
 
 	public void setHours(double hours) {
-		this.hours = hours;
+		this.Hours = hours;
 	}
 
 	public double getAmount() {

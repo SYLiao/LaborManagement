@@ -1,6 +1,8 @@
 package com.labormanagement.java.entity;
 
 import javax.persistence.*;
+
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Entity
@@ -10,7 +12,7 @@ public class TimeSheet {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long TimeSheetId;
 	
-	private Date creatDate;
+	private String creatDate;
 	
 	@ManyToOne
 	private User user;
@@ -26,15 +28,18 @@ public class TimeSheet {
 	private double Hours;
 
 	private double amount;
-	
+
 	private String status;
+	
+	private String user_name;
 	
 	public TimeSheet(){
 		this.status = "submitted";
 	}
 	
 	public TimeSheet(Date date, String sitecode) {
-		this.creatDate = date;
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		this.creatDate = format.format(date);
 		this.siteCode = sitecode;
 		this.status = "submitted";
 	}
@@ -47,12 +52,13 @@ public class TimeSheet {
 		TimeSheetId = timeSheetId;
 	}
 
-	public Date getCreatDate() {
+	public String getCreatDate() {
 		return creatDate;
 	}
 
 	public void setCreatDate(Date creatDate) {
-		this.creatDate = creatDate;
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		this.creatDate = format.format(creatDate);
 	}
 
 	public User getUser() {
@@ -61,6 +67,7 @@ public class TimeSheet {
 
 	public void setUser(User user) {
 		this.user = user;
+		setUser_name();
 	}
 
 	public JobWorkload getJobWorkload() {
@@ -69,6 +76,8 @@ public class TimeSheet {
 
 	public void setJobWorkload(JobWorkload jobWorkload) {
 		this.jobWorkload = jobWorkload;
+		this.Hours += this.jobWorkload.getHours();
+		this.amount += this.jobWorkload.getJobManager().getRate()*this.jobWorkload.getHours();;
 	}
 
 	public MachineWorkload getMachineWorkload() {
@@ -77,6 +86,8 @@ public class TimeSheet {
 
 	public void setMachineWorkload(MachineWorkload machineWorkload) {
 		this.machineWorkload = machineWorkload;
+		this.Hours += this.machineWorkload.getHours();
+		this.amount += this.machineWorkload.getMachineManager().getRate()*this.machineWorkload.getHours();
 	}
 
 	public String getSiteCode() {
@@ -101,6 +112,19 @@ public class TimeSheet {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	
+	public String getUser_name() {
+		return user_name;
+	}
+
+	public void setUser_name() {
+		if(this.user != null) {
+			this.user_name = user.getUsername();
+		}
+		else{
+			this.user_name = "None";
+		}
 	}
 	
 	public double getHours() {

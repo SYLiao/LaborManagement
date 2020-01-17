@@ -78,7 +78,6 @@
 										<th>Machine Code</th>
 										<th>Description</th>
 										<th>Hourly Rent</th>
-										<th>Max Hours Per Day</th>
 										<th>Edit</th>
 										<th>Delete</th>
 									</tr>
@@ -87,7 +86,7 @@
 									<tr th:each="MachineManager : ${MachineManager}">
 										<td th:text="${MachineManager.machineCode}"></td>
 										<td th:text="${MachineManager.description}"></td>
-										<td th:text="${MachineManager.amount}"></td>
+										<td th:text="${MachineManager.rate}"></td>
 										<td><a th:href="@{/Admin/editMachine/{id}(id=${MachineManager.MachineId})}"
 											class="btn btn-primary"> <i class="fas fa-user-edit ml-2"></i>
 										</a></td>
