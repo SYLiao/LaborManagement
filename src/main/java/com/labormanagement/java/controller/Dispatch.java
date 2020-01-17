@@ -17,6 +17,7 @@ import com.labormanagement.java.entity.JobManager;
 import com.labormanagement.java.entity.JobWorkload;
 import com.labormanagement.java.entity.MachineManager;
 import com.labormanagement.java.entity.MachineWorkload;
+import com.labormanagement.java.entity.Role;
 import com.labormanagement.java.entity.TimeSheet;
 import com.labormanagement.java.entity.User;
 import com.labormanagement.java.service.JobManagerService;
@@ -309,6 +310,22 @@ public class Dispatch {
 		List<TimeSheet> list = timeSheetService.findAll();
 		mv.addObject("TimeSheet", list);
 		mv.addObject("size", list.size());
+		return mv;
+	}
+	
+	@RequestMapping(value = "/createUserPage", method = RequestMethod.GET)
+	public ModelAndView createUserPage() {
+		ModelAndView mv = new ModelAndView("CreateUser");
+		mv.addObject("NewUser", new User());
+		return mv;
+	}
+	
+	@RequestMapping(value = "/createUser", method = RequestMethod.POST)
+	public ModelAndView createUserConfirm(User createdUser) throws ParseException {
+		Role role = roleService.findByName(createdUser.getRoleName());
+		createdUser.setRole(role);
+		userService.createUser(createdUser);
+		ModelAndView mv = new ModelAndView("login");
 		return mv;
 	}
 }

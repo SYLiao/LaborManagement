@@ -30,6 +30,8 @@ public class User implements UserDetails{
 	@ManyToOne
 	private Role role;
 	
+	private String roleName;
+	
 	@OneToMany(fetch=FetchType.EAGER)
 	private List<TimeSheet> sheets;
 	
@@ -126,5 +128,11 @@ public class User implements UserDetails{
 		return true;
 	}
 
-	
+	public String getRoleName() {
+		return roleName;
+	}
+
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
+	}
 }
