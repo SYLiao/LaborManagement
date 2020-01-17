@@ -27,6 +27,8 @@ import com.labormanagement.java.service.RoleService;
 import com.labormanagement.java.service.TimeSheetService;
 import com.labormanagement.java.service.UserService;
 
+import javassist.expr.NewArray;
+
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
@@ -307,6 +309,21 @@ public class Dispatch {
 		List<TimeSheet> list = timeSheetService.findAll();
 		mv.addObject("TimeSheet", list);
 		mv.addObject("size", list.size());
+		return mv;
+	}
+	
+	@RequestMapping(value = "/createUserPage", method = RequestMethod.GET)
+	public ModelAndView createUserPage() {
+		ModelAndView mv = new ModelAndView("CreateUser");
+		mv.addObject("NewUser", new User());
+		return mv;
+	}
+	
+	@RequestMapping(value = "/createUser", method = RequestMethod.POST)
+	public ModelAndView createUserConfirm(User createdUser) throws ParseException {
+		userService.createUser(createdUser);
+		ModelAndView mv = new ModelAndView("CreateUser");
+		mv.addObject("NewUser", new User());
 		return mv;
 	}
 }
