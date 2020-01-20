@@ -29,7 +29,7 @@ rent hours of machine. Then the total cost can be calculated and shown in timeca
 
 
 ### Class diagram
-![image](http://github.com/SYLiao/LaborManagement/tree/master/images/class_diagram.png)
+![Screen shot](http://github.com/SYLiao/LaborManagement/tree/master/images/class_diagram.png)
 
 ### Flow diagram
-![image](http://github.com/SYLiao/LaborManagement/tree/master/images/Flow_diagram.jpg)
+![Screen shot](http://github.com/SYLiao/LaborManagement/tree/master/images/Flow_diagram.jpg)
