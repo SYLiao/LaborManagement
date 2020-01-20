@@ -1,6 +1,6 @@
 # Project Title
 
-Disaster recovery labor training PRoject
+Disaster recovery labor training Project
 
 ## Introduction
 
