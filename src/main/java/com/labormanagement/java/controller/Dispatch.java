@@ -328,4 +328,10 @@ public class Dispatch {
 		ModelAndView mv = new ModelAndView("login");
 		return mv;
 	}
+	
+	@RequestMapping(value = "/403")
+    public ModelAndView error() {
+		ModelAndView mv = new ModelAndView("Error"); 
+        return mv;
+    }
 }
